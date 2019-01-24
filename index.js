@@ -9,6 +9,7 @@ import {
   Text,
   Slider,
   NetInfo,
+  Image,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import reactMixin from 'react-mixin';
@@ -26,7 +27,10 @@ import {
 } from './assets/icons';
 const TRACK_IMAGE = require('./assets/track.png');
 const THUMB_IMAGE = require('./assets/thumb.png');
-
+const BCAK_IMAGE=require('./assets/icon_back_48white.png');
+const COLLECTION_IMAGE=require('./assets/icon_collection_48white.png');
+const SHARE_IMAGE=require('./assets/icon_share_48white.png');
+const CACHE_IMAGE=require('./assets/icon_cache_48white.png');
 // UI states
 
 var CONTROL_STATES = {
@@ -145,7 +149,7 @@ export default class VideoPlayer extends React.Component {
       fontSize: 12,
     },
     // Callbacks
-    playbackCallback: () => {},
+    playbackCallback: () => { },
     errorCallback: error => {
       console.log('Error: ', error.message, error.type, error.obj);
     },
@@ -289,7 +293,7 @@ export default class VideoPlayer extends React.Component {
         this._setPlaybackState(PLAYBACK_STATES.ERROR);
         const errorMsg = `Encountered a fatal error during playback: ${
           playbackStatus.error
-        }`;
+          }`;
         this.setState({
           error: errorMsg,
         });
@@ -572,12 +576,12 @@ export default class VideoPlayer extends React.Component {
           style={
             center
               ? {
-                  backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                  justifyContent: 'center',
-                  width: centeredContentWidth,
-                  height: centeredContentWidth,
-                  borderRadius: centeredContentWidth,
-                }
+                backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                justifyContent: 'center',
+                width: centeredContentWidth,
+                height: centeredContentWidth,
+                borderRadius: centeredContentWidth,
+              }
               : {}
           }>
           {children}
@@ -626,6 +630,46 @@ export default class VideoPlayer extends React.Component {
           style={{
             backgroundColor: 'black',
           }}>
+          <Animated.View
+            pointerEvents={
+              this.state.controlsState === CONTROL_STATES.HIDDEN
+                ? 'none'
+                : 'auto'
+            }
+            style={{
+              position: 'absolute',
+
+              zIndex: 2,
+              flexDirection: 'row',
+              opacity: this.state.controlsOpacity
+            }}>
+            <TouchableOpacity onPress={() => { this.props.navigation.goBack() }}>
+              <View style={{ marginLeft: 8 }}>
+                <Image source={BCAK_IMAGE} />
+              </View>
+            </TouchableOpacity>
+            <View style={{ flexDirection: 'row-reverse', flex: 1, marginLeft: 14 }}>
+              <TouchableOpacity>
+                <View style={{ marginLeft: 20 }}>
+                  <Image source={COLLECTION_IMAGE} />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <View style={{ marginLeft: 20 }}>
+
+                  <Image source={CACHE_IMAGE} />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <View style={{ marginLeft: 20 }}>
+
+                  <Image source={SHARE_IMAGE} />
+                </View>
+
+              </TouchableOpacity>
+            </View>
+
+          </Animated.View>
           <Video
             source={source}
             ref={component => {
@@ -643,12 +687,12 @@ export default class VideoPlayer extends React.Component {
           {/* Spinner */}
           {((this.state.playbackState == PLAYBACK_STATES.BUFFERING &&
             Date.now() - this.state.lastPlaybackStateUpdate >
-              BUFFERING_SHOW_DELAY) ||
+            BUFFERING_SHOW_DELAY) ||
             this.state.playbackState == PLAYBACK_STATES.LOADING) && (
-            <CenteredView>
-              <Spinner />
-            </CenteredView>
-          )}
+              <CenteredView>
+                <Spinner />
+              </CenteredView>
+            )}
 
           {/* Play/pause buttons */}
           {(this.state.seekState == SEEK_STATES.NOT_SEEKING ||
@@ -668,8 +712,8 @@ export default class VideoPlayer extends React.Component {
                   {this.state.playbackState == PLAYBACK_STATES.PLAYING ? (
                     <PauseIcon />
                   ) : (
-                    <PlayIcon />
-                  )}
+                      <PlayIcon />
+                    )}
                 </Control>
               </CenteredView>
             )}
@@ -718,7 +762,7 @@ export default class VideoPlayer extends React.Component {
               onLayout={this._onSliderLayout.bind(this)}
               onPress={this._onSeekBarTap.bind(this)}>
               <Slider
-                style={{ marginRight: 10, marginLeft: 10, flex: 1 }}
+                style={{ marginRight: 20, marginLeft: 20, flex: 1 }}
                 trackImage={this.props.trackImage}
                 thumbImage={this.props.thumbImage}
                 value={this._getSeekSliderPosition()}
@@ -755,8 +799,8 @@ export default class VideoPlayer extends React.Component {
                 {this.props.isPortrait ? (
                   <FullscreenEnterIcon />
                 ) : (
-                  <FullscreenExitIcon />
-                )}
+                    <FullscreenExitIcon />
+                  )}
               </Control>
             )}
           </Animated.View>
