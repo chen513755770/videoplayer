@@ -165,6 +165,7 @@ export default class VideoPlayer extends React.Component {
       );
     },
     showControlsOnLoad: false,
+
   };
 
   constructor(props) {
@@ -641,9 +642,10 @@ export default class VideoPlayer extends React.Component {
 
               zIndex: 2,
               flexDirection: 'row',
-              opacity: this.state.controlsOpacity
+              opacity: this.state.controlsOpacity,
+              marginTop: 30,
             }}>
-            <TouchableOpacity onPress={() => { this.props.navigation.goBack() }}>
+            <TouchableOpacity onPress={() => { this.props.goBack() }}>
               <View style={{ marginLeft: 8 }}>
                 <Image source={BCAK_IMAGE} />
               </View>
